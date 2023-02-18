@@ -8,23 +8,31 @@ public class temp : MonoBehaviour
 {
     // Start is called before the first frame update
     
-        public List<InputDevice> devices = new List<InputDevice>();
-    
+
     void Start()
     {
+        List<InputDevice> devices = new List<InputDevice>();
         InputDevices.GetDevices(devices);
-       foreach (InputDevice device in devices)
+        foreach (var item in devices)
         {
-            Debug.Log(device.name + device.characteristics);
+            print(item.name);
         }
-        Debug.Log(devices.Count);
+        print(devices.Count);
+        
         
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        List<InputDevice> devices = new List<InputDevice>();
+        InputDevices.GetDevices(devices);
+        foreach (var item in devices)
+        {
+            print(item.name);
+        }
+        print(devices.Count);
+
 
     }
 }
