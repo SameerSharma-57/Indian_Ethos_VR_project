@@ -30,6 +30,7 @@ public class Mining : MonoBehaviour
         }
         else
         {
+            currentVal = Convert.ToDouble(PlayerPrefs.GetString("Mine Amount"));
             prevTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("Closing Time")));
             currentVal += (prevTime.Subtract(DateTime.Now).TotalSeconds) * increaseRate;
         }
@@ -42,10 +43,12 @@ public class Mining : MonoBehaviour
         if (currentVal < maxVal)
         {
             currentVal += increaseRate * Time.smoothDeltaTime;
+            PlayerPrefs.SetString("Mine Amount", currentVal.ToString());
         }
         else if (currentVal > maxVal)
         {
             currentVal = maxVal;
+            PlayerPrefs.SetString("Mine Amount", currentVal.ToString());
         }
     }
 
