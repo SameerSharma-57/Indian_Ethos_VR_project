@@ -1,59 +1,31 @@
-using System.Collections;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 public class Mining : MonoBehaviour
 {
     public TextMeshPro ValueDisplay;
-    public double increaseRate; //in double/seconds
-    public int maxVal;
-    private double cVal = -1;
-    private DateTime prevTime;
-    public double currentVal
-    {
-        get { return cVal; }
-        set
-        {
-            cVal = value;
-            ValueDisplay.text = Math.Truncate(cVal) + " / " + maxVal;
-        }
-    }
+    public Mine mine;
+    public PlayerData playerData;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (currentVal == -1)
-        {
-            currentVal = 0;
-        }
-        else
-        {
-            currentVal = Convert.ToDouble(PlayerPrefs.GetString("Mine Amount"));
-            prevTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString("Closing Time")));
-            currentVal += (prevTime.Subtract(DateTime.Now).TotalSeconds) * increaseRate;
-        }
-        ValueDisplay.text = currentVal.ToString();
+        playerData.mineAmount += (playerData.closingTime.Subtract(DateTime.Now).TotalSeconds) * mine.increaseRate;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (currentVal < maxVal)
+        if (playerData.mineAmount < mine.maxValue)
         {
-            currentVal += increaseRate * Time.smoothDeltaTime;
-            PlayerPrefs.SetString("Mine Amount", currentVal.ToString());
+            playerData.mineAmount += mine.increaseRate * Time.smoothDeltaTime;
+            ValueDisplay.text = Math.Truncate(playerData.mineAmount).ToString() + " / " + mine.maxValue.ToString();
         }
-        else if (currentVal > maxVal)
+        else if (playerData.mineAmount > mine.maxValue)
         {
-            currentVal = maxVal;
-            PlayerPrefs.SetString("Mine Amount", currentVal.ToString());
+            playerData.mineAmount = mine.maxValue;
+            ValueDisplay.text = Math.Truncate(playerData.mineAmount).ToString() + " / " + mine.maxValue.ToString();
         }
     }
 
-    void OnApplicationQuit()
-    {
-        PlayerPrefs.SetString("Closing Time", DateTime.Now.ToBinary().ToString());
-    }
 }
